@@ -1,24 +1,23 @@
 from fastapi import FastAPI
 from sqlalchemy import text
-
-from database.connection import engine
+from models import engine, SessionLocal
+from models import Province
 
 app = FastAPI()
 
 @app.get("/provinces")
 def get_provinces():
     
-    with engine.connect() as conn:
-        result = conn.execute(
-            text("SELECT * FROM provinsi")
-        )
-        provinces = []
+    session = SessionLocal()
+    provinces = session.query(Province).all()
+    
+    result = [
+        {
+            "id": p.id,
+            "name": p.name
+        }
+        for p in provinces
+    ]
+    session.close()
 
-        for row in result:
-            provinces.append(
-                {
-                   "id": row.id,
-                   "name": row.name 
-                }
-            )
-        return provinces
+    return result
