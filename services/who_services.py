@@ -3,7 +3,7 @@ import requests
 BASE_URL = "https://ghoapi.azureedge.net/api"
 
 class WHOService:
-    def get_indicator(self):
+    def get_indicators(self):
         response = requests.get(
             f"{BASE_URL}/Indicator"
         )
